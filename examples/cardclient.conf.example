@@ -1,0 +1,71 @@
+#
+# Comment lines can start with # or ;
+#
+# every client line starts with the client name, followed by some arguments:
+# 'hostname' is the name of the server
+# 'port'     is the port on the server
+# 'emm'      is a flag to allow EMM transfers to the server
+#            (0=disabled 1=enabled 2=enabled without caching)
+# 'caid'     (optional) caid on which this client should work
+# 'mask'     (optional) mask for caid e.g. caid=1700 mask=FF00 would allow
+#            anything between 1700 & 17FF.
+#            Default is 1700 & FF00. If only caid is given mask is FFFF.
+#            You may give multiple caid/mask values comma separated
+#            (e.g. 1702,1722,0d0c/ff00).
+# 'username' is the login username
+# 'password' is the login password
+#
+# radegast client
+radegast:hostname:port:emm/caid/mask
+#
+# aroureos client
+# 'hexbase'
+# 'hexserial' card data for which EMM updates should be send
+aroureos:hostname:port:emm/caid/mask:hexbase:hexserial
+#
+# camd33 client (tcp protocol)
+# 'aeskey'   is the AES key (32bytes), disable encryption if missing
+camd33:hostname:port:emm/caid/mask:username:password:aeskey
+#
+# camd35 client (udp protocol)
+camd35:hostname:port:emm/caid/mask:username:password
+#
+# cardd client
+cardd:hostname:port:emm/caid/mask:username:password
+#
+# buffy client
+# 'aeskey'   is the AES key (32bytes), disable encryption if missing
+buffy:hostname:port:emm:username:password:aeskey
+#
+# newcamd client
+# 'cfgkey' is the config key (28bytes)
+newcamd:hostname:port:emm/caid/mask:username:password:cfgKey
+#
+# gbox client
+#
+# NOTE: hostname & port will be ignore. GBOX must be runnning on the local
+# machine. For convinience you should choose localhost:8004
+gbox:hostname:port:emm/caid/mask
+#
+# cccam client (via LD_PRE_LOAD wrapper)
+#
+# NOTE: hostname will be ignore. CCcam must be runnning on the local machine
+# 'socket' is the name of the camd socket file. For multiple cards add %d
+# into the string. This will be replaced with the number 0-3.
+# e.g. /var/emu/chroot%d/tmp/camd.socket
+cccam:hostname:port:emm/caid/mask:socket
+#
+# (the real) cccam client
+#
+# The parameter field is a list of parameters seperated by ','. The individual
+# parameters must be given in the form PARAMETER=VALUE.
+# NODEID=<16 characters>    - your static node ID. Defaults to random ID
+# VERSION=<str>             - version string. Defaults to '2.0.11'
+# BUILD=<str>               - build string. Defaults to '2892'
+# WANTEMUS=<0/1>            - requesting of emulations. Defaults to 0 (off)
+#
+# parameter example: BUILD=3212,WANTEMUS=1,NODEID=123A567F901C34E6
+#
+# NOTE: this is a real client. You don't need to have CCcam running on local
+# machine.
+cccam2:hostname:port:emm/caid/mask:username:password[:param=value[,param=value]]

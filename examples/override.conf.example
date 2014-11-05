@@ -1,0 +1,128 @@
+;
+; Comment lines can start with # or ;
+;
+
+; NOTE: everything which was hardcoded to SC before has been added as an active
+; example to this file.
+; But the entries may already be out-dated at the time you are reading this.
+; Please feel free to submit updates on this...
+
+;
+; In general every entry has a validity range, specified by caid/source/freq or
+; source/freq. The validity range is enclosed with {} brakets. Some specifiers
+; may be obmited, but you cannot omit the ':' delimiters.
+;
+; format:
+; {caid[-caid]:[src[-src]]:[freq[-freq]]}
+; {src[-src]:[freq[-freq]]}
+;
+; examples:
+; matches caid 1815-1830 on sat 19.2E. Freqency is empty, so match all.
+; {1815-1830:S19.2E:}
+; same, but only matches on one frequency
+; {1815-1830:S19.2E:12973}
+; matches a lot of NA sats, all frequencies
+; {S61.5W-S148W:}
+; matches a single caid on a single sat
+; {1801:S28.5E:}
+; matches a frequency range on a sat
+; {S13W:10500-11674}
+; matches a caid on everything
+; {1234::}
+;
+
+;
+; Define ignored CAIDs for general processing
+;
+; NOTE: this replace the CaIgnore option in setup.conf. See below on how to
+; convert your settings
+;
+; format:
+; ignore:{src[-src]:[freq[-freq]]}caid[:caid][...]
+; ignore:{*}caid[:caid][...]
+;
+; if your ignore line in setup.conf looks like this
+; sc.CaIgnore = 622 9c4 b00 d22 1702 1722 1836 1837
+; then you should add an entry like this
+; ignore:{*}0622:09c4:0b00:0d22:1702:1722:1836:1837
+; Of course you could set a more fine grade validity range as well.
+;
+; examples
+; ignore:{S61.5W-S148W:}1801:0D04:0600
+; ignore:{*}0622:1833
+
+;
+; Define priority chains for ECM processing
+;
+; The first listed CAID will have the highest priority, then stepping down. If a
+; CAID is not listed, the priority will be lower than the last one.
+;
+; NOTE: priorities based on provider ID are supported for CAID 0100 & 0500 only,
+; and are rejected for others.
+;
+; format:
+; ecmprio:{src[-src]:[freq[-freq]]}caid[/provid][:caid[/provid]][...]
+;
+; examples
+; ecmprio:{S19.2E:}0100/6a:0622
+; ecmprio:{S28.5E:12973}1833:1702:1801
+
+;
+; Add entries to the CAT (conditional access table) in case a EMM stream is
+; not announced there.
+;
+; format
+; cat:{src[-src]:[freq[-freq]]}caid:pid
+;
+; examples:
+; cat:{S61.5W-S148W:}1816:0120
+;
+cat:{S61.5W-S148W:}1816:0120  # DISH N3
+
+;
+; Define an alternative table for ECM data (default is 80/81)
+;
+; format:
+; ecmtable:{caid[-caid]:[src[-src]]:[freq[-freq]]}table
+;
+; examples:
+; ecmtable:{1234::}8E
+;
+ecmtable:{1234::}8E       # BEV
+ecmtable:{1801:S82W:}8E   # DISH
+ecmtable:{1801:S91W:}8E   # DISH
+
+;
+; Define an alternative caid to use for EMM data.
+;
+; format:
+; emmcaid:{caid[-caid]:[src[-src]]:[freq[-freq]]}emmcaid
+;
+; examples
+; emmcaid:{1234::}1801
+; emmcaid:{1816:S61.5W-S148W:}1801
+;
+emmcaid:{1234::}1801      # BEV
+
+;
+; Define alternative table for EMM data
+;
+; format:
+; emmtable:{caid[-caid]:[src[-src]]:[freq[-freq]]}table[/mask][:table[/mask]][...]
+;
+; examples:
+; emmtable:{1816:S61.5W-S148W:}83:84
+; emmtable:{1815:S61.5W-S148W:}83:84
+; emmtable:{1811:S19.2E:}82/FE
+;
+emmtable:{1816:S61.5W-S148W:}83:84 # DISH N3
+emmtable:{1815:S82W-S91W:}83:84    # BEV N3
+
+;
+; Define caid tunneling for ECM messages (with optional data rewriting)
+;
+; format:
+; tunnel:{caid[-caid]:[src[-src]]:[freq[-freq]]}newcaid[:rewriter]
+;
+; examples:
+; tunnel:{1833:S19.2E:}1702:nagra-beta

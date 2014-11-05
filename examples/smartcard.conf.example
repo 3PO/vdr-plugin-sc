@@ -1,0 +1,109 @@
+;
+; Comment lines can start with # or ;
+;
+
+; Videoguard2
+;
+; NDS seed and boxid for camcrypt
+;
+; boxid  - boxid (4 byte = 8 chars)
+; seed1  - 1st seed (64 byte = 128 chars)
+; seed2  - 2nd seed (64 byte = 128 chars)
+;
+; videoguard2: SEED seed1 seed2
+videoguard2: SEED 00112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233 00112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233
+;
+; videoguard2: BOXID boxid
+videoguard2: BOXID 11223344
+
+; Nagra
+;
+; boxkey and modulus for camcrypt
+;
+; cardid - card ID / serial (4 byte = 8 chars)
+; boxkey - boxkey (8 byte = 16 chars)
+; mod    - modulus (big endian) (64 byte = 128 chars)
+; seckey - secondary key (96 byte = 192 chars)
+;
+; For a card with dt08 you should give the IRDMOD to decrypt the dt08.
+; Otherwise the CARDMOD is used directly for session key negotiation.
+; If you give a secondary key, the CARDMOD and (calculated) BOXKEY inside it
+; will be used.
+;
+; nagra: cardid boxkey IRDMOD mod
+nagra: 12345678 0011223344556677 IRDMOD 00112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233
+;
+; nagra: cardid boxkey CARDMOD mod
+nagra: 12345678 0011223344556677 CARDMOD 00112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233
+;
+; nagra: cardid SK seckey
+nagra: 12345678 SK 001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455
+
+; Cryptoworks
+;
+; RSA modulus for camcrypt
+;
+; caid   - caid identifying the provider
+; serial - serial number identifying the card
+; ipk    - issuer public key (IPK), 64 bytes = 128 chars
+; ucpk   - session key (calculated from ISK, IPK & exponent), 64 bytes = 128 chars
+; pin    - pin number to disable parental rating
+; 
+; Note: you need only one of them for your caid. IPK is more general (common for
+; all cards of a provider), while the UCPK is different for every single card.
+;
+; cryptoworks: IPK caid ipk
+cryptoworks: IPK 0d22 00112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233
+;
+; cryptoworks: UCPK serial ucpk
+cryptoworks: UCPK 0102030405 00112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233
+;
+; cryptoworks: PIN serial pin
+cryptoworks: PIN 0102030405 1234
+
+; Viaccess
+;
+; serial - serial number (UA) identifying the card
+; pin    - pin number to disable parental rating (up to 16 digits)
+; aes    - AES key for postprocessing CW, 16 bytes = 32 chars
+;
+; viaccess: PIN serial pin
+viaccess: PIN 0102030405 1234
+;
+; viaccess: AES serial aes
+viaccess: AES 0102030405 00112233445566778899001122334455
+
+; Conax
+;
+; serial - serial number identifying the card
+; pin    - pin number to disable parental rating
+;
+; conax: PIN serial pin
+conax: PIN 01020304050607 1234
+
+; Irdeto/Betacrypt
+;
+; RSA certificate for camkey challenge
+;
+; acs  - ACS version identifying the card (optional)
+; caid - caid for further identification of the card (optional)
+; mod  - RSA modulus, usualy 128 bytes = 256 chars
+; exp  - RSA exponent, usualy 1 byte = 2 chars
+;
+; Irdeto default certificate
+; irdeto: mod exp
+irdeto: 0011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677 03
+;
+; a ACS specific certificate
+; irdeto: [acs] mod exp
+irdeto: [0604] 0011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677 03
+;
+; a ACS/caid specific certificate
+; irdeto: [acs/caid] mod exp
+irdeto: [0384/1722] 0011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677889900112233445566778899001122334455667788990011223344556677 03
+;
+; indicates that a card doesn't want/need RSA camkey exchange
+; NOTE: this is autodetected for ACS 0383/0384 cards (Z/non-Z mode)
+;
+; irdeto: [acs/caid] PLAIN
+irdeto: [0605/0622] PLAIN

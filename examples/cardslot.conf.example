@@ -1,0 +1,50 @@
+;
+; Comment lines can start with # or ;
+;
+
+; cardslot with phoenix/smartmouse cardreader on serial port
+;
+; dev   - serial device e.g. /dev/ttyS0
+; CD    - card detect 0=normal 1=inverted
+; RST   - card reset  0=normal 1=inverted
+; clock - clock frequency in Hz. If missing or 0, default=3571200
+;
+serial:/dev/ttyS0:0:0
+serial:/dev/ttyS1:1:0:3579545
+
+; cardslot with Smargo Smartreader+ on serial port
+;
+; srplus:dev:[clock]
+;
+; dev   - serial device e.g. /dev/ttyS0
+; clock - clock frequency in Hz. Defaults to 3571200 Hz
+;
+; The clock frequency is automatically configured according to ISO 7816-3. It
+; is possible to override the clock frequency via parameter for overclocking,
+; however don't do this unless you know exactly what you're doing - you may
+; possibly fry your smartcard!
+;
+srplus:/dev/ttyS0
+srplus:/dev/ttyS1:6000000
+
+; cardslot talking to PCSCd using CCID protocol for communication
+;
+; ccid:reader
+;
+; reader   - reader name e.g. as given by pcsc_scan
+;
+; For using this cardslot type, you must have installed pcsd-lite and ccid
+; driver package. Before compiling you should add something like this to your
+; Make.config file:
+; WITH_PCSC = 1
+; INCLUDES += -I/usr/include/PCSC
+;
+ccid:SCR331 USB Smart Card Reader 00 00
+
+; emulated smartcard on dummy port. For testing/debugging purpose only!
+; The emulation code has to be enabled with the CARD_EMU define im smartcard.c
+;
+emuseca:
+emucrypto:
+emuirdeto:acs383
+emuirdeto:acs384
