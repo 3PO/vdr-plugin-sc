@@ -1564,8 +1564,8 @@ private:
   int numcaids;
   caid_t caids[MAX_CI_SLOT_CAIDS+1];
 public:
-  cChannelCaids(cChannel *channel);
-  bool IsChannel(cChannel *channel);
+  cChannelCaids(const cChannel *channel);
+  bool IsChannel(const cChannel *channel);
   void Sort(void);
   void Del(caid_t caid);
   bool HasCaid(caid_t caid);
@@ -1578,7 +1578,7 @@ public:
   int Transponder(void) const { return transponder; }
   };
 
-cChannelCaids::cChannelCaids(cChannel *channel)
+cChannelCaids::cChannelCaids(const cChannel *channel)
 {
   prg=channel->Sid(); source=channel->Source(); transponder=channel->Transponder();
   numcaids=0;
@@ -1587,7 +1587,7 @@ cChannelCaids::cChannelCaids(cChannel *channel)
   Sort();
 }
 
-bool cChannelCaids::IsChannel(cChannel *channel)
+bool cChannelCaids::IsChannel(const cChannel *channel)
 {
   return prg==channel->Sid() && source==channel->Source() && transponder==channel->Transponder();
 }
@@ -2187,14 +2187,15 @@ void cCam::BuildCaids(bool force)
   if(caidTimer.TimedOut() || force || (rebuildcaids && triggerTimer.TimedOut())) {
     PRINTF(L_CORE_CAIDS,"%s: building caid lists",devId);
     cChannelList list(devId);
-    Channels.Lock(false);
-    for(cChannel *channel=Channels.First(); channel; channel=Channels.Next(channel)) {
+    {
+    LOCK_CHANNELS_READ;
+    for(const cChannel *channel=Channels->First(); channel; channel=Channels->Next(channel)) {
       if(!channel->GroupSep() && channel->Ca()>=CA_ENCRYPTED_MIN && device->ProvidesTransponder(channel)) {
         cChannelCaids *ch=new cChannelCaids(channel);
         if(ch) list.Add(ch);
         }
       }
-    Channels.Unlock();
+    }
     list.Unique(true);
     list.CheckIgnore();
     list.Unique(false);
