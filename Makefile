@@ -179,3 +179,5 @@ clean: clean-systems clean-ffdecsa
 	@-rm -f $(PODIR)/*.mo $(PODIR)/*.pot
 	@-rm -f $(OBJS) $(DEPFILE) *.so *.tgz core* *~
 	@-rm -rf lib
+	@-rm -f sc-version.c
+
