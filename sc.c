@@ -51,7 +51,7 @@
 #include "opts.h"
 #include "i18n.h"
 #include "log-core.h"
-#include "version.h"
+#include "sc-version.h"
 
 #define MIN_VERS   1 // required VDR version
 #define MIN_MAJOR  6

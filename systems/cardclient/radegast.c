@@ -22,7 +22,7 @@
 
 #include "cc.h"
 #include "parse.h"
-#include "version.h"
+#include "sc-version.h"
 
 // -- cCardClientRadegast ------------------------------------------------------
 

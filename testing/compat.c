@@ -15,7 +15,7 @@
 #include "smartcard.h"
 #include "cam.h"
 #include "log-core.h"
-#include "version.h"
+#include "sc-version.h"
 
 #define LIBSC_PREFIX  "libsc-"
 #define SO_INDICATOR   ".so."

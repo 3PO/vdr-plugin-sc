@@ -25,7 +25,7 @@
 
 #include "irdeto.h"
 #include "log-irdeto.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 

@@ -28,7 +28,7 @@
 #include "misc.h"
 #include "opts.h"
 #include "log-core.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 

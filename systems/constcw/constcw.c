@@ -28,7 +28,7 @@
 #include "system-common.h"
 #include "data.h"
 #include "misc.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 

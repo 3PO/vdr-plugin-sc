@@ -17,16 +17,19 @@
  * Or, point your browser to http://www.gnu.org/copyleft/gpl.html
  */
 
-#include "nds.h"
-#include "log-nds.h"
-#include "sc-version.h"
+#ifndef ___VERSION_H
+#define ___VERSION_H
 
-SCAPIVERSTAG();
+#define SC_RELEASE "1.0.0pre"
 
-static const struct LogModule lm_sys = {
-  (LMOD_ENABLE|L_SYS_ALL)&LOPT_MASK,
-  (LMOD_ENABLE|L_SYS_DEFDEF)&LOPT_MASK,
-  "nds",
-  { L_SYS_DEFNAMES }
-  };
-ADD_MODULE(L_SYS,lm_sys)
+extern const char *ScVersion;
+
+// SC API version number for loading shared libraries
+#define SCAPIVERS 30
+#ifndef STATICBUILD
+#define SCAPIVERSTAG() int ScLibApiVersion=SCAPIVERS
+#else
+#define SCAPIVERSTAG()
+#endif //STATICBUILD
+
+#endif

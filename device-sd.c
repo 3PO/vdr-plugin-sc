@@ -31,7 +31,7 @@
 #include "cam.h"
 #include "scsetup.h"
 #include "log-core.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 

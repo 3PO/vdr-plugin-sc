@@ -32,7 +32,7 @@
 #include "parse.h"
 #include "crypto.h"
 #include "helper.h"
-#include "version.h"
+#include "sc-version.h"
 
 static const char *cccamstr="CCcam";
 

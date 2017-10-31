@@ -12,7 +12,7 @@ PLUGIN = sc
 ### The version number of this plugin (taken from the main source file):
 DISTFILE = .distvers
 HGARCHIVE = .hg_archival.txt
-RELEASE := $(shell grep 'define SC_RELEASE' version.h | awk '{ print $$3 }' | sed -e 's/[";]//g')
+RELEASE := $(shell grep 'define SC_RELEASE' sc-version.h | awk '{ print $$3 }' | sed -e 's/[";]//g')
 SUBREL  := $(shell if test -d .hg; then \
                      echo -n "HG-"; (hg identify 2>/dev/null || echo -n "Unknown") | sed -e 's/ .*//'; \
                    elif test -r $(HGARCHIVE); then \
@@ -23,7 +23,7 @@ SUBREL  := $(shell if test -d .hg; then \
                      echo -n "Unknown"; \
                    fi)
 VERSION := $(RELEASE)-$(SUBREL)
-SCAPIVERS := $(shell sed -ne '/define SCAPIVERS/ s/^.[a-zA-Z ]*\([0-9]*\).*$$/\1/p' version.h)
+SCAPIVERS := $(shell sed -ne '/define SCAPIVERS/ s/^.[a-zA-Z ]*\([0-9]*\).*$$/\1/p' sc-version.h)
 ### The directory environment:
 
 # Use package data if installed...otherwise assume we're under the VDR source directory:
@@ -70,7 +70,7 @@ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
 
 ### The object files (add further files here):
 
-OBJS = $(PLUGIN).o data.o filter.o system.o misc.o cam.o device.o version.o \
+OBJS = $(PLUGIN).o data.o filter.o system.o misc.o cam.o device.o sc-version.o \
        smartcard.o network.o crypto.o system-common.o parse.o log.o \
        override.o
 
@@ -97,7 +97,7 @@ all: $(SOFILE) systems-pre systems i18n
 ### Dependencies:
 
 MAKEDEP = $(CXX) -MM -MG
-DEPFILES = $(subst i18n.c,,$(subst version.c,,$(OBJS:%.o=%.c)))
+DEPFILES = $(subst i18n.c,,$(subst sc-version.c,,$(OBJS:%.o=%.c)))
 $(DEPFILE): $(DEPFILES) $(wildcard *.h)
 	@$(MAKEDEP) $(CXXFLAGS) $(DEFINES) $(INCLUDES) $(OBJS:%.o=%.c) > $@
 
@@ -127,7 +127,7 @@ $(I18Nmsgs): $(DESTDIR)$(LOCDIR)/%/LC_MESSAGES/vdr-$(PLUGIN).mo: $(PODIR)/%.mo
 .PHONY: i18n systems systems-pre
 i18n: $(I18Nmo) $(I18Npot)
 
-version.c:
+sc-version.c:
 	@echo >$@.new "/* generated file, do not edit */"; \
 		echo >>$@.new 'const char *ScVersion =' '"'$(VERSION)'";'; \
 		diff $@.new $@ >$@.diff 2>&1; \
@@ -169,9 +169,13 @@ dist: $(I18Npo) clean
 	@echo Distribution package created as $(PACKAGE).tgz
 
 clean-systems:
-	@for i in `ls -A -I ".*" $(SYSDIR)`; do $(MAKE) -f ../../Makefile.system -C "$(SYSDIR)/$$i" clean; done
+	@for i in `ls -A -I ".*" $(SYSDIR)`; do > /dev/null 2>&1 $(MAKE) -f ../../Makefile.system -C "$(SYSDIR)/$$i" clean; done
 
-clean: clean-systems
+clean-ffdecsa:
+	@-rm -f $(FFDECSADIR)/FFdecsa_test $(FFDECSADIR)/FFdecsa_test.done $(FFDECSADIR)/*.o
+
+
+clean: clean-systems clean-ffdecsa
 	@-rm -f $(PODIR)/*.mo $(PODIR)/*.pot
 	@-rm -f $(OBJS) $(DEPFILE) *.so *.tgz core* *~
 	@-rm -rf lib

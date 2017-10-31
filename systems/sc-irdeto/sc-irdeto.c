@@ -30,7 +30,7 @@
 #include "parse.h"
 #include "log-sc.h"
 #include "log-core.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 

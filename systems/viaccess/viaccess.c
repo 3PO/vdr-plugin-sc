@@ -31,7 +31,7 @@
 #include "viaccess.h"
 #include "tps.h"
 #include "log-viaccess.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 

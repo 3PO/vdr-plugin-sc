@@ -29,7 +29,7 @@
 #include "crypto.h"
 #include "misc.h"
 #include "log-sys.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 

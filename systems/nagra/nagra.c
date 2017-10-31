@@ -25,7 +25,7 @@
 #include "nagra-def.h"
 #include "log-nagra.h"
 #include "log-core.h"
-#include "version.h"
+#include "sc-version.h"
 
 SCAPIVERSTAG();
 
