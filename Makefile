@@ -45,6 +45,8 @@ export CXXFLAGS = $(call PKGCFG,cxxflags)
 export SCAPIVERS
 export APIVERSION
 
+export CXXFLAGS += -std=c++0x -Wno-narrowing
+
 ### The version number of VDR's plugin API:
 
 APIVERSION = $(call PKGCFG,apiversion)
