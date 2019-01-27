@@ -2187,7 +2187,10 @@ void cCam::BuildCaids(bool force)
   if(caidTimer.TimedOut() || force || (rebuildcaids && triggerTimer.TimedOut())) {
     PRINTF(L_CORE_CAIDS,"%s: building caid lists",devId);
     cChannelList list(devId);
+
+
     {
+#if VDRVERSNUM >= 20301
     LOCK_CHANNELS_READ;
     for(const cChannel *channel=Channels->First(); channel; channel=Channels->Next(channel)) {
       if(!channel->GroupSep() && channel->Ca()>=CA_ENCRYPTED_MIN && device->ProvidesTransponder(channel)) {
@@ -2195,7 +2198,18 @@ void cCam::BuildCaids(bool force)
         if(ch) list.Add(ch);
         }
       }
+#else
+    Channels.Lock(false);
+    for(const cChannel *channel=Channels.First(); channel; channel=Channels.Next(channel)) {
+      if(!channel->GroupSep() && channel->Ca()>=CA_ENCRYPTED_MIN && device->ProvidesTransponder(channel)) {
+        cChannelCaids *ch=new cChannelCaids(channel);
+        if(ch) list.Add(ch);
+        }
+      }
+Channels.Unlock();
+#endif
     }
+
     list.Unique(true);
     list.CheckIgnore();
     list.Unique(false);

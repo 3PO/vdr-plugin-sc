@@ -51,6 +51,14 @@ class cDeCSA;
 #define DVB_DEV_SPEC CardIndex(),0
 #endif
 
+#ifndef CA_SET_PID /* removed in kernel 4.14 */
+typedef struct ca_pid {
+        unsigned int pid;
+        int index;          /* -1 == disable */
+} ca_pid_t;
+#define CA_SET_PID _IOW('o', 135, struct ca_pid)
+#endif
+
 // ----------------------------------------------------------------
 
 #ifndef SASC
