@@ -2628,7 +2628,7 @@ void cCam::SetCWIndex(int pid, int index)
 void cCam::WriteCW(int index, unsigned char *cw, bool force)
 {
   if(index<MAX_CW_IDX) {
-    for(int i=0; i<16; i+=4) cw[i+3]=cw[i]+cw[i+1]+cw[i+2];
+//    for(int i=0; i<16; i+=4) cw[i+3]=cw[i]+cw[i+1]+cw[i+2];
     ca_descr_t ca_descr;
     ca_descr.index=index;
     unsigned char *last=lastCW[index];
