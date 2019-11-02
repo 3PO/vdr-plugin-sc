@@ -28,7 +28,7 @@
 //       (as AES_KEY is const there), but SetKey is not. Be carefull.
 //
 
-#define OPENSSL_ALGORITHM_DEFINES
+//#define OPENSSL_ALGORITHM_DEFINES
 #include <openssl/opensslconf.h>
 #include <openssl/opensslv.h>
 
